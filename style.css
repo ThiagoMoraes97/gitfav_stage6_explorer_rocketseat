@@ -62,9 +62,10 @@ header .search-input input::placeholder, header .search-input input{
     line-height: 100%; 
 }
 
-header .search-input button{
+header .search-input .favorite-button{
     border-radius: 0.5rem;
     background: #065E7C;
+    border: none;
     padding: 1.2rem 3.2rem;
     cursor: pointer;
 
@@ -78,15 +79,18 @@ header .search-input button{
     line-height: 2.4rem;
 }
 
-header .search-input button:hover{
-    background: #054960;
+header .search-input .favorite-button:hover{
+    background: #FFF;
+    color: #065E7C;
+}
+
+header .search-input .favorite-button:hover svg path{
+    fill: #065E7C;
 }
 
 main table{
     width: 100%;
     border-spacing: 0;
-    max-height: 65rem;
-    overflow-y: hidden;
 }
 
 main table thead tr th{
@@ -179,6 +183,7 @@ main table tbody .without-users{
     width: 100%;
     border-radius: 0 0 1.2rem 1.2rem;
     height: 65rem;
+    padding: 0;
     
     color: #4E5455;
     font-family: "Roboto Mono", sans-serif;
@@ -225,4 +230,47 @@ main table tbody tr .username-info img{
     width: 5.6rem;
     height: 5.6rem;
     border-radius: 50%;
+}
+
+main table tbody tr .username-info .user-info p, 
+main table tbody tr .username-info .user-info a{
+    color: #E1E1E6;
+    font-family: Roboto, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 160%;
+}
+
+main table tbody tr .username-info .user-info a{
+    font-weight: 400;
+    text-decoration: none;
+    color: #ccccce;
+}
+
+main table tbody tr .username-info .user-info a:hover{
+    color: #E1E1E6;
+}
+
+main table tbody tr .public_repos, 
+main table tbody tr .followers{
+    color:#E1E1E6;
+    font-family: Roboto, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 160%; 
+}
+
+main table tbody tr .remove-button{
+    color: #F75A68;
+    font-family: Roboto, sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 160%; 
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+main table tbody tr .remove-button:hover{
+    color: #f63a4a;
 }
