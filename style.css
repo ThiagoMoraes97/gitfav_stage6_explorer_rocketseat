@@ -53,9 +53,14 @@ header .search-input input{
     background: #06181C;
     width: 46.2rem;
     border: none;
+
+    color: #7C7C8A;
+    font-family: Roboto, sans-serif;
+    font-size: 1.6rem;
+    line-height: 100%; 
 }
 
-header .search-input input::placeholder, header .search-input input{
+header .search-input input::placeholder{
     color: #7C7C8A;
     font-family: Roboto, sans-serif;
     font-size: 1.6rem;
@@ -136,7 +141,7 @@ main table thead tr{
     text-align: left;
 }
 
-main table thead tr .no-users{
+main table thead tr .no-user{
     width: 35rem;
 }
 
