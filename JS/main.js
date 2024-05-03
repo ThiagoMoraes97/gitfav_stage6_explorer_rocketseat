@@ -1,35 +1,48 @@
 let userInput = document.getElementById("git_search")
 let favoritesButton = document.querySelector(".favorite-button")
 let userHeaderColumn = document.querySelector("thead tr .user")
-let userInfo = []
-
-
-favoritesButton.onclick = () => {
-   let username = userInput.value 
-   getGitHubUserInfo(username)
+let userInfo
+userInput.onfocus = () => {
+    window.onkeydown = (event) => {
+       if(event.key === "Enter"){
+            favoriteUser()
+       }
+    }
 }
+favoritesButton.onclick = favoriteUser
 
 async function getGitHubUserInfo(username) {
 
     const userExist = userInfo.find(users => users.login === username)
 
-    console.log(userExist)
-
     if(userExist){
         return
     }
 
-    let endpoint = `https://api.github.com/users/${username}`
+    try{ 
 
-    let jsonGitHub = await fetch(endpoint).then(file => file.json()) 
+        let endpoint = `https://api.github.com/users/${username}`
+
+        let response = await fetch(endpoint)
+
+        if(!response.ok){
+            throw new Error ("Deve inserir um usuário válido!")
+        }
+
+        let jsonGitHub = await response.json(); 
     
-    const {login, name, public_repos, followers} = jsonGitHub
+        const {login, name, public_repos, followers} = jsonGitHub
 
-    const newUser = {login, name, public_repos, followers}
+        const newUser = {login, name, public_repos, followers}  
 
-    userInfo = [newUser, ...userInfo]
+        userInfo = [newUser, ...userInfo]
+
+    }catch (error){ 
+        alert(error.message)
+    }   
 
     updateTrInfo()
+    saveInfoLocal(userInfo)
 
 }
 
@@ -69,6 +82,7 @@ function createTableTr () {
 
 function updateTrInfo () {
     if(userInfo.length === 0){
+        removeAllTr()
         userHeaderColumn.classList.add("no-user")
         let tr = createTableTr()
         document.querySelector("tbody").append(tr)
@@ -86,7 +100,7 @@ function updateTrInfo () {
         tr.querySelector(".username-info .user-info a").href =`https://github.com/${user.login}`
         tr.querySelector(".public_repos").textContent = user.public_repos
         tr.querySelector(".followers").textContent = user.followers
-        tr.querySelector(".remove-button").onclick = () => {console.log(`Esse é o usuário de ${user.name}`)}
+        tr.querySelector(".remove-button").onclick = () => removeUser(user)
         document.querySelector("tbody").append(tr)
     })
 
@@ -97,3 +111,32 @@ function removeAllTr () {
     const allTr = tbody.querySelectorAll("tr")
     allTr.forEach(tr => tr.remove())
 }
+
+function saveInfoLocal (userList) {
+    const userListJson = JSON.stringify(userList)
+    localStorage.setItem("github-users", userListJson)
+}
+
+function getInfoLocal () {
+    const userList = localStorage.getItem("github-users") ?? []
+    if (typeof userList != "object"){
+        userInfo = JSON.parse(userList)
+    } else {
+        userInfo = userList
+    } 
+}
+
+function removeUser (user) {
+    const newUserInfo = userInfo.filter(data => data.login != user.login)
+    userInfo = newUserInfo
+    saveInfoLocal(userInfo)
+    updateTrInfo()
+}
+
+function favoriteUser () {
+    let username = userInput.value 
+    getGitHubUserInfo(username) 
+}
+
+getInfoLocal()
+updateTrInfo()
