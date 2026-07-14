@@ -13,7 +13,8 @@ O usuário informa um username, a aplicação consulta a API pública do GitHub 
 - Remover usuários da lista.
 - Persistir favoritos no navegador com `localStorage`.
 - Exibir estado vazio quando não há favoritos.
-- Layout responsivo para telas menores.
+- Layout responsivo sem scroll lateral: em telas menores, a tabela se adapta para cards.
+- Favicon personalizado usando o asset `star_table.svg`.
 
 ## Tecnologias
 

@@ -68,16 +68,16 @@ function createTableTr () {
 
     } else {
         tr.innerHTML = `
-        <td class="username-info">
+        <td class="username-info" data-label="Usuário">
             <img src="https://github.com/maykbrito.png" alt="Imagem de usuário do GitHub de Mayk Brito">
             <div class="user-info">
                 <p>Mayk Brito</p>
                 <a href="https://github.com/maykbrito" target="_blank" rel="noopener noreferrer">maykbrito</a>
             </div>
         </td>
-        <td class="public_repos">125</td>
-        <td class="followers">1235</td>
-        <td>
+        <td class="public_repos" data-label="Repositories">125</td>
+        <td class="followers" data-label="Followers">1235</td>
+        <td class="action-info" data-label="Ação">
             <button class="remove-button">Remover</button>
         </td>`
     }

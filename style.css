@@ -100,7 +100,6 @@ main table{
 }
 
 main{
-    overflow-x: auto;
     padding-bottom: 3rem;
 }
 
@@ -316,10 +315,6 @@ main table tbody tr .remove-button:hover{
         justify-content: center;
     }
 
-    main table{
-        min-width: 70rem;
-    }
-
     main table tbody .without-users{
         height: 40rem;
         font-size: 2.4rem;
@@ -329,5 +324,100 @@ main table tbody tr .remove-button:hover{
         flex-direction: column;
         gap: 2.4rem;
         text-align: center;
+    }
+
+    main table,
+    main table thead,
+    main table tbody,
+    main table tr,
+    main table th,
+    main table td{
+        display: block;
+        width: 100%;
+    }
+
+    main table thead{
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+    }
+
+    main table tbody{
+        display: grid;
+        gap: 1.2rem;
+    }
+
+    main table tbody tr{
+        border: 1px solid #4A808C;
+        border-radius: 1.2rem;
+        overflow: hidden;
+    }
+
+    main table tbody tr td,
+    main table tbody tr td:first-child,
+    main table tbody tr td:last-child,
+    main table tbody tr:last-child td,
+    main table tbody tr:last-child td:first-child,
+    main table tbody tr:last-child td:last-child{
+        border: 0;
+        border-radius: 0;
+    }
+
+    main table tbody tr td{
+        padding: 1.4rem 1.6rem;
+        border-top: 1px solid #4A808C;
+    }
+
+    main table tbody tr td:first-child{
+        border-top: 0;
+    }
+
+    main table tbody tr td:not(.without-users)::before{
+        content: attr(data-label);
+        display: block;
+        margin-bottom: .8rem;
+        color: #7C7C8A;
+        font-family: Roboto, sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        letter-spacing: .08rem;
+        line-height: 1.6rem;
+        text-transform: uppercase;
+    }
+
+    main table tbody tr .username-info{
+        display: grid;
+        grid-template-columns: 5.6rem 1fr;
+        align-items: center;
+        column-gap: 1.6rem;
+        row-gap: .8rem;
+    }
+
+    main table tbody tr .username-info::before{
+        grid-column: 1 / -1;
+        margin-bottom: 0;
+    }
+
+    main table tbody tr .public_repos,
+    main table tbody tr .followers{
+        font-size: 1.8rem;
+    }
+
+    main table tbody tr .action-info{
+        padding-top: 1.2rem;
+        padding-bottom: 1.2rem;
+    }
+
+    main table tbody tr .action-info::before{
+        display: none;
+    }
+
+    main table tbody tr .remove-button{
+        width: 100%;
+        padding: 1rem 0;
+        text-align: left;
     }
 }
