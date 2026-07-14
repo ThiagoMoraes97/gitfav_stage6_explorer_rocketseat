@@ -1,62 +1,67 @@
-let userInput = document.getElementById("git_search")
-let favoritesButton = document.querySelector(".favorite-button")
-let userHeaderColumn = document.querySelector("thead tr .user")
-let userInfo
-userInput.onfocus = () => {
-    window.onkeydown = (event) => {
-       if(event.key === "Enter"){
-            favoriteUser()
-       }
+const userInput = document.getElementById("git_search")
+const favoritesButton = document.querySelector(".favorite-button")
+const userHeaderColumn = document.querySelector("thead tr .user")
+let userInfo = []
+
+userInput.addEventListener("keydown", event => {
+    if(event.key === "Enter"){
+        favoriteUser()
     }
-}
-favoritesButton.onclick = favoriteUser
+})
+
+favoritesButton.addEventListener("click", favoriteUser)
 
 async function getGitHubUserInfo(username) {
+    const cleanUsername = username.trim()
 
-    const userExist = userInfo.find(users => users.login === username)
+    if(!cleanUsername){
+        alert("Digite um username do GitHub.")
+        return
+    }
 
+    const userExist = userInfo.some(user => user.login.toLowerCase() === cleanUsername.toLowerCase())
     if(userExist){
+        alert("Esse usuário já foi favoritado.")
         return
     }
 
     try{ 
 
-        let endpoint = `https://api.github.com/users/${username}`
-
-        let response = await fetch(endpoint)
+        const endpoint = `https://api.github.com/users/${encodeURIComponent(cleanUsername)}`
+        const response = await fetch(endpoint)
 
         if(!response.ok){
-            throw new Error ("Deve inserir um usuário válido!")
+            throw new Error ("Digite um usuário válido.")
         }
 
-        let jsonGitHub = await response.json(); 
+        const jsonGitHub = await response.json()
     
         const {login, name, public_repos, followers} = jsonGitHub
 
-        const newUser = {login, name, public_repos, followers}  
+        const newUser = {login, name, public_repos, followers}
 
         userInfo = [newUser, ...userInfo]
-
+        updateTrInfo()
+        saveInfoLocal(userInfo)
+        userInput.value = ""
+        userInput.focus()
     }catch (error){ 
         alert(error.message)
-    }   
-
-    updateTrInfo()
-    saveInfoLocal(userInfo)
+    }
 
 }
 
 function createTableTr () {
-    let tr = document.createElement("tr")
+    const tr = document.createElement("tr")
 
-    let isAnyUser = userHeaderColumn.classList.contains("no-user") 
+    const isAnyUser = userHeaderColumn.classList.contains("no-user") 
 
     if(isAnyUser){
 
         tr.innerHTML = `
         <td class="without-users" colspan="4">
             <div class="td-content">
-                <img src="/assets/star_table.svg" alt="Imagem de uma estrela com uma espressão de assustada.">
+                <img src="./assets/star_table.svg" alt="Imagem de uma estrela com uma expressão assustada.">
                 Nenhum favorito ainda
             </div>
         </td>`
@@ -64,10 +69,10 @@ function createTableTr () {
     } else {
         tr.innerHTML = `
         <td class="username-info">
-            <img src="https://github.com/maykbrito" alt="Imagem de usuário do GitHub de Mayk Brito">
+            <img src="https://github.com/maykbrito.png" alt="Imagem de usuário do GitHub de Mayk Brito">
             <div class="user-info">
                 <p>Mayk Brito</p>
-                <a href="https://github.com/maykbrito" target="_blank">maykbrito</a>
+                <a href="https://github.com/maykbrito" target="_blank" rel="noopener noreferrer">maykbrito</a>
             </div>
         </td>
         <td class="public_repos">125</td>
@@ -92,10 +97,12 @@ function updateTrInfo () {
     userHeaderColumn.classList.remove("no-user")
     removeAllTr()
     userInfo.forEach(user => {
-        let tr = createTableTr()
+        const tr = createTableTr()
+        const displayName = user.name || user.login
+
         tr.querySelector(".username-info img").src = `https://github.com/${user.login}.png`
-        tr.querySelector(".username-info img").alt = `Imagem de usuário do GitHub de ${user.name}`
-        tr.querySelector(".username-info .user-info p").textContent = user.name
+        tr.querySelector(".username-info img").alt = `Imagem de usuário do GitHub de ${displayName}`
+        tr.querySelector(".username-info .user-info p").textContent = displayName
         tr.querySelector(".username-info .user-info a").textContent = user.login
         tr.querySelector(".username-info .user-info a").href =`https://github.com/${user.login}`
         tr.querySelector(".public_repos").textContent = user.public_repos
@@ -118,12 +125,22 @@ function saveInfoLocal (userList) {
 }
 
 function getInfoLocal () {
-    const userList = localStorage.getItem("github-users") ?? []
-    if (typeof userList != "object"){
-        userInfo = JSON.parse(userList)
-    } else {
-        userInfo = userList
-    } 
+    const userList = localStorage.getItem("github-users")
+
+    if(!userList){
+        userInfo = []
+        return
+    }
+
+    try{
+        const parsedUserList = JSON.parse(userList)
+        userInfo = Array.isArray(parsedUserList)
+            ? parsedUserList.filter(user => user && typeof user.login === "string")
+            : []
+    }catch{
+        userInfo = []
+        saveInfoLocal(userInfo)
+    }
 }
 
 function removeUser (user) {
@@ -134,7 +151,7 @@ function removeUser (user) {
 }
 
 function favoriteUser () {
-    let username = userInput.value 
+    const username = userInput.value 
     getGitHubUserInfo(username) 
 }
 

@@ -27,7 +27,8 @@ body{
 
 
 .page{
-    height: 100vh;
+    min-height: 100vh;
+    width: min(112rem, calc(100% - 4rem));
     max-width: 112rem;
     margin: 0 auto;
     padding-top: 5rem;
@@ -37,7 +38,7 @@ header{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 28.6rem;
+    gap: 4rem;
     margin-bottom: 8.7rem;
 }
 
@@ -96,6 +97,11 @@ header .search-input .favorite-button:hover svg path{
 main table{
     width: 100%;
     border-spacing: 0;
+}
+
+main{
+    overflow-x: auto;
+    padding-bottom: 3rem;
 }
 
 main table thead tr th{
@@ -278,4 +284,50 @@ main table tbody tr .remove-button{
 
 main table tbody tr .remove-button:hover{
     color: #f63a4a;
+}
+
+@media (max-width: 760px){
+    .page{
+        width: calc(100% - 3.2rem);
+        padding-top: 3.2rem;
+    }
+
+    header{
+        align-items: stretch;
+        flex-direction: column;
+        gap: 3.2rem;
+        margin-bottom: 4rem;
+    }
+
+    header > img{
+        width: 18rem;
+    }
+
+    header .search-input{
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    header .search-input input{
+        width: 100%;
+    }
+
+    header .search-input .favorite-button{
+        justify-content: center;
+    }
+
+    main table{
+        min-width: 70rem;
+    }
+
+    main table tbody .without-users{
+        height: 40rem;
+        font-size: 2.4rem;
+    }
+
+    main table tbody .without-users .td-content{
+        flex-direction: column;
+        gap: 2.4rem;
+        text-align: center;
+    }
 }
